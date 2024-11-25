@@ -1,22 +1,11 @@
 // React Imports
-import type { ImgHTMLAttributes } from 'react'
+import type { SVGAttributes } from 'react'
 
 // Importando a logo como um componente funcional
-const AppLogo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
+const AppLogo = (props:  SVGAttributes<SVGElement>) => {
   return (
-    <>
-      <svg
-        fill='#000000'
-        width='1.4583em'
-        height='1em'
-        version='1.1'
-        id='Capa_1'
-        xmlns='http://www.w3.org/2000/svg'
-        viewBox='0 0 493.31 493.31'
-        {...props}
-      >
-        <g>
-          <path
+      <svg width='1.4583em' height='1em' viewBox='0 0 35 24' fill='none' xmlns='http://www.w3.org/2000/svg' {...props}>
+        <path
             d='M465.193,126.194c-2.69-10.209-9.19-18.781-18.334-24.095l-53.451-31.143c0.083,5.546-0.276,11.153-1.728,16.764
         l-4.256,16.701l43.353,25.272c2.386,1.38,3.243,3.508,3.547,4.653c0.29,1.138,0.581,3.411-0.806,5.791l-98.734,169.459
         L305.72,422.912L461.13,156.208C466.45,147.08,467.902,136.411,465.193,126.194z'
@@ -64,9 +53,9 @@ const AppLogo = (props: ImgHTMLAttributes<HTMLImageElement>) => {
             d='M206.936,292.732h-38.304c-5.583,0-10.13,4.524-10.13,10.128v38.288c0,5.597,4.547,10.121,10.13,10.121h38.304
         c5.592,0,10.126-4.523,10.126-10.121V302.86C217.061,297.256,212.528,292.732,206.936,292.732z'
           />
-        </g>
-      </svg>
-    </>
+</svg>
+
+
   )
 }
 
