@@ -62,7 +62,7 @@ const Navigation = (props: Props) => {
 
   // Vars
   const { isCollapsed, isHovered, collapseVerticalNav, isBreakpointReached } = verticalNavOptions
-  const isServer = typeof window === 'undefined'
+  const isServer = false
   const isSemiDark = settings.semiDark
   let isDark
 

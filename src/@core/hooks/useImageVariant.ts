@@ -1,4 +1,7 @@
-// React Imports
+'use client'
+/// React Imports
+
+
 import { useMemo } from 'react'
 
 // Third-party imports
@@ -22,7 +25,7 @@ export const useImageVariant = (
   const { mode: muiMode, systemMode: muiSystemMode } = useColorScheme()
 
   return useMemo(() => {
-    const isServer = typeof window === 'undefined'
+    const isServer = false
 
     const currentMode = (() => {
       if (isServer) return mode
