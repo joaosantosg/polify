@@ -1,0 +1,115 @@
+import requests
+import json
+import time
+
+
+hospitals = [
+    [547484,"HCN - HOSPITAL ESTADUAL DO CENTRO NORTE GOIANO","URUACU"],
+    [2337517,"HOSPITAL ORTOPEDICO DE CERES","CERES"],
+    [2337576,"HOSPITAL SAO PIO X","CERES"],
+    [2338262,"HUGO - HOSPITAL DE URGENCIAS DE GOIAS DR VALDEMIRO CRUZ HUGO","GOIANIA"],
+    [2338734,"HGG - HOSPITAL ESTADUAL DR ALBERTO RASSI HGG","GOIANIA"],
+    [2339080,"HEMNSL - HOSPITAL ESTADUAL E MATERNIDADE N SRA DE LOURDES HEMNSL","GOIANIA"],
+    [2339196,"HEMU - HOSPITAL ESTADUAL DA MULHER DR JURANDIR DO NASCIMENTO HEMU","GOIANIA"],
+    [2340194,"HEL - HOSPITAL ESTADUAL DE LUZIANIA","LUZIANIA"],
+    [2343525,"HOSPITAL DE CARIDADE SAO PEDRO D ALCANTARA","GOIAS"],
+    [2361779,"INSTITUTO DE MEDICINA DO COMPORTAMENTO EURIPEDES BARSANULFO","ANAPOLIS"],
+    [2361787,"SANTA CASA DE MISERICORDIA DE ANAPOLIS","ANAPOLIS"],
+    [2361949,"HEJA - HOSPITAL ESTADUAL DE JARAGUA SANDINO DE AMORIM","JARAGUA"],
+    [2382466,"HOSPITAL MUNICIPAL DE MORRINHOS","MORRINHOS"],
+    [2382474,"HRSLMB - HOSPITAL ESTADUAL DE S LUIS DE MONTES BELOS DR GERALDO LANDO","SAO LUIS DE MONTES BELOS"],
+    [2437783,"HEELJ - HOSPITAL ESTADUAL DE PIRENOPOLIS ERNESTINA LOPES JAIME","PIRENOPOLIS"],
+    [2442019,"HOSPITAL SAGRADO CORACAO DE JESUS NEROPOLIS","NEROPOLIS"],
+    [2442477,"HOSPITAL MUNICIPAL HENRIQUE ANTONIO SANTILO","PORANGATU"],
+    [2442604,"HOSPITAL NASR FAIAD","CATALAO"],
+    [2442612,"SANTA CASA DE MISERICORDIA DE CATALAO","CATALAO"],
+    [2442620,"HOSPITAL E MATERNIDADE SAO NICOLAU","CATALAO"],
+    [2506661,"HDT - HOSPITAL ESTADUAL DOENCAS TROPICAIS DR ANUAR AUAD HDT","GOIANIA"],
+    [2517957,"CASA DE EURIPEDES","GOIANIA"],
+    [2519186,"INSTITUTO ESPIRITA BATUIRA DE SAUDE MENTAL","GOIANIA"],
+    [2534967,"HEF - HOSPITAL ESTADUAL DE FORMOSA DR CESAR SAAD FAYAD","FORMOSA"],
+    [2535556,"HEJ - HOSPITAL ESTADUAL DE JATAI DR SERAFIM DE CARVALHO","JATAI"],
+    [2570777,"HGSC HOSPITAL GERAL DE SENADOR CANEDO","SENADOR CANEDO"],
+    [2570823,"HOSPITAL E MATERNIDADE NOSSA SENHORA APARECIDA LTDA","CALDAS NOVAS"],
+    [2589265,"HEI - HOSPITAL ESTADUAL DE ITUMBIARA SAO MARCOS","ITUMBIARA"],
+    [2653818,"HDS - HOSPITAL ESTADUAL DERMATOLOGIA SANIT COLONIA STA MARTA HDS","GOIANIA"],
+    [2673932,"CRER - CRER","GOIANIA"],
+    [2789647,"HOSPITAL MUNICIPAL MODESTO DE CARVALHO","ITUMBIARA"],
+    [2814218,"HOSPITAL DO CANCER DE RIO VERDE","RIO VERDE"],
+    [3771962,"HEANA - HOSPITAL ESTADUAL DE ANAPOLIS DR HENRIQUE SANTILLO HEANA","ANAPOLIS"],
+    [5095808,"HETRIN - HOSPITAL ESTADUAL DE TRINDADE WALDA F DOS SANTOS HETRIN","TRINDADE"],
+    [5419662,"HEAPA - HOSPITAL ESTAD DE APARECIDA DE GOIANIA CAIRO LOUZADA HEAPA","APARECIDA DE GOIANIA"],
+    [5685834,"HOSPITAL DR DOMINGOS MENDES","CERES"],
+    [6665322,"HERSO - HOSPITAL ESTADUAL DE SANTA HELENA DE GOIAS HERSO","SANTA HELENA DE GOIAS"],
+    [7532024,"HOSPITAL PADRE TIAGO NA PROVIDENCIA DE DEUS","JATAI"],
+    [7743068,"HUGOL - HOSPITAL ESTADUAL DE URGENCIAS GOV OTAVIO LAG SIQUEIRA HUGOL","GOIANIA"],
+    [7772173,"CAPS - CREDEQ - COMPLEXO DE REFE ESTADUAL SAUDE MENTAL PROF JAMIL ISSY CRESM","APARECIDA DE GOIANIA"],
+    [8013543,"HOSPITAL MUNICIPAL DR EVARISTO VILELA MACHADO","MINEIROS"],
+    [9138625,"CEAP-SOL - CENTRO ATEN PROLONGADA CASA APOIO COND SOLIDARIEDADE CEAPSOL","GOIANIA"],
+    [932027,"HOSPITAL EDMUNDO FERNANDES","URUACU"],
+    [965324,"HECAD - HOSPITAL ESTADUAL DA CRIANCA E DO ADOLESCENTE HECAD","GOIANIA"],
+    [4261682,"HOSPITAL MATERNO INFANTIL AUGUSTA BASTOS","RIO VERDE"],
+    [4670906,"HEAL - HOSPITAL ESTADUAL DE AGUAS LINDAS RONALDO RAMOS CAIADO FILHO","AGUAS LINDAS DE GOIAS"]
+]
+
+BASE_URL = "https://indicadores.saude.go.gov.br/pentaho/plugin/cda/api/doQuery"
+
+
+HEADERS = {
+    'Accept': '*/*',
+    'Accept-Language': 'en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7',
+    'Connection': 'keep-alive',
+    'Cookie': 'JSESSIONID=9D43735AEDD25E5360CFD93F8CDD38C9; TS01cd64c3=0126fcd357febbd774ee735e10553a2ca271225924f1dbc136f829994c9da89e44fd4303a178a0172efd7882cd2beb50e7fcad31d1d05323181a912587c45700d05486d2faa96dd913252113741941ca7d672b3109; CookieGenericoGoias=rd3o00000000000000000000ffff0a06b318o80; session-expiry=1732385106018; server-time=1732377906018; TS0134ba38=0126fcd357086b45daccea0401bb09e9604c3842cf85204cc93acac1a09f402a65dfe54f5aa647b915aecf189ed13eb5592a3a1e048e676098e320db15453612f1180638c590948e354c26744fb18cc71f2b21148c0e038cb9955f35294d523bee0a39be15',
+    'Referer': 'https://indicadores.saude.go.gov.br/pentaho/api/repos/%3Amapa_de_leitos%3Apaineis%3Apainel.wcdf/generatedContent',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Linux"',
+}
+
+
+def fetch_hospital_data(hospital):
+    params = {
+        "path": "/mapa_de_leitos/paineis/painel.cda",
+        "dataAccessId": "ds_panel_mapa_mpl_ktr",
+        "paramunidade_mpl": hospital[0],
+        "paramunidades_contratos": 0,
+    }
+    try:
+        response = requests.get(BASE_URL, headers=HEADERS, params=params, timeout=30)
+        response.raise_for_status()
+        return {
+            "hospital": hospital,
+            "data": response.json()
+        }
+    except requests.RequestException as e:
+        print(f"erro {hospital[1]}: {e}")
+        return {
+            "hospital": hospital,
+            "error": str(e)
+        }
+
+def fetch_all_hospitals(hospitals):
+    all_data = []
+    for hospital in hospitals:
+        print(f"buscando para {hospital[1]}")
+        data = fetch_hospital_data(hospital)
+        all_data.append(data)
+        time.sleep(1)
+    return all_data
+
+
+def save_to_json(data, filename="hospitals_data.json"):
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+if __name__ == "__main__":
+
+    results = fetch_all_hospitals(hospitals)
+
+    save_to_json(results)
+
